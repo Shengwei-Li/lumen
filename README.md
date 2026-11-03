@@ -35,12 +35,17 @@ The recording controls never appear in the video.
 
 Get the latest build from [Releases](https://github.com/Shengwei-Li/lumen/releases/latest).
 
-| File | Size | Requires |
+| File | Size | |
 |---|---|---|
-| `Lumen-<version>-win-x64.zip` | ~1 MB | [.NET 8 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/8.0) (x64) |
-| `Lumen-<version>-win-x64-portable.zip` | ~70 MB | Nothing; unzip and run |
+| `Lumen-<version>-Setup.exe` | ~50 MB | Installer. Per-user, no administrator rights needed. |
+| `Lumen-<version>-win-x64-portable.zip` | ~70 MB | Unzip anywhere and run `Lumen.exe`. |
 
-Both builds also need the [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist) (x64). Most Windows installations already have it.
+Both include the .NET runtime. They need the
+[Microsoft Visual C++ Redistributable](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist) (x64),
+which most Windows installations already have; the installer checks for it.
+
+The builds are not code-signed, so Windows SmartScreen may ask for confirmation on first run:
+choose **More info**, then **Run anyway**.
 
 ## Shortcuts
 
@@ -60,8 +65,12 @@ window. Settings live in `%APPDATA%\Lumen`.
 dotnet publish -c Release -o publish
 ```
 
-Requires the .NET 8 SDK on Windows. For a build with the runtime included, add
-`--self-contained true`.
+Requires the .NET 8 SDK on Windows. To build the installer and the portable zip into
+`artifacts/` (needs [Inno Setup 6](https://jrsoftware.org/isinfo.php)):
+
+```bash
+powershell -ExecutionPolicy Bypass -File installer/build.ps1
+```
 
 ## How it works
 
