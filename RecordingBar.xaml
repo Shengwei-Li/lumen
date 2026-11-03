@@ -1,0 +1,36 @@
+<Window x:Class="Lumen.RecordingBar"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:c="clr-namespace:Lumen.Controls"
+        Title="Lumen" WindowStyle="None" ResizeMode="NoResize" Topmost="True"
+        ShowInTaskbar="False" ShowActivated="False" SizeToContent="WidthAndHeight"
+        Background="{StaticResource Ink}" FontFamily="{StaticResource Sans}"
+        UseLayoutRounding="True" SnapsToDevicePixels="True">
+    <Grid x:Name="Root" Height="40" Background="Transparent" Cursor="SizeAll">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="1"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Ellipse x:Name="Dot" Width="8" Height="8" Margin="16,0,10,0" Fill="{StaticResource Signal}"
+                 StrokeThickness="1" VerticalAlignment="Center"/>
+        <TextBlock x:Name="Time" Grid.Column="1" Text="00:00:00" MinWidth="64"
+                   FontFamily="{StaticResource Mono}" FontSize="14" Foreground="{StaticResource Paper}"
+                   VerticalAlignment="Center"/>
+        <c:LevelMeter x:Name="Meter" Grid.Column="2" Width="52" Height="8" Margin="14,0,16,0" Segments="13"
+                      OnBrush="{StaticResource Paper}" OffBrush="{StaticResource InkLine}"
+                      HotBrush="{StaticResource Signal}" VerticalAlignment="Center"/>
+        <TextBlock x:Name="StallText" Grid.Column="2" Text="Capture stalled" FontSize="12"
+                   Foreground="{StaticResource Signal}" Margin="14,0,16,0" VerticalAlignment="Center"
+                   Visibility="Collapsed"/>
+        <Rectangle Grid.Column="3" Fill="{StaticResource InkLine}" Margin="0,10"/>
+        <Button x:Name="PauseBtn" Grid.Column="4" Style="{StaticResource BarButton}" Content="&#xE769;"
+                ToolTip="Pause  F10" Click="Pause_Click" Cursor="Hand"/>
+        <Button x:Name="StopBtn" Grid.Column="5" Style="{StaticResource BarButton}" Content="&#xE71A;"
+                ToolTip="Stop  F9" Click="Stop_Click" Cursor="Hand" Margin="0,0,4,0"/>
+    </Grid>
+</Window>

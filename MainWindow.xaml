@@ -1,0 +1,292 @@
+﻿<Window x:Class="Lumen.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:c="clr-namespace:Lumen.Controls"
+        Title="Lumen" Icon="Assets/lumen.ico" Width="780" Height="648" ResizeMode="CanMinimize" WindowStyle="None"
+        WindowStartupLocation="CenterScreen" Background="{StaticResource Bg}"
+        FontFamily="{StaticResource Sans}" FontSize="13" Foreground="{StaticResource Ink}"
+        UseLayoutRounding="True" SnapsToDevicePixels="True">
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="44" ResizeBorderThickness="0" GlassFrameThickness="0,0,0,1"
+                      CornerRadius="0" UseAeroCaptionButtons="False"/>
+    </WindowChrome.WindowChrome>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="1"/>
+            <RowDefinition/>
+            <RowDefinition Height="1"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title bar -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Lumen" FontSize="14" FontWeight="SemiBold" Margin="24,0,0,1" VerticalAlignment="Center"/>
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <TextBlock x:Name="HotkeyHint" Style="{StaticResource T.Mono}" Margin="0,0,18,0"
+                           Text="F9  Record    F10  Pause"/>
+                <Button Style="{StaticResource Chrome}" Content="&#xE921;" Click="Minimize_Click"/>
+                <Button Style="{StaticResource ChromeClose}" Content="&#xE8BB;" Click="Close_Click"/>
+            </StackPanel>
+        </Grid>
+        <Rectangle Grid.Row="1" Fill="{StaticResource Line}"/>
+
+        <!-- Body -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="440"/>
+                <ColumnDefinition Width="1"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <!-- 01 Source -->
+            <Grid Margin="24,20,24,20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="28"/>
+                    <RowDefinition Height="14"/>
+                    <RowDefinition Height="214"/>
+                    <RowDefinition Height="16"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="186"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="01" Style="{StaticResource T.Num}"/>
+                        <TextBlock Text="Source" Style="{StaticResource T.Section}"/>
+                    </StackPanel>
+                    <Border Grid.Column="1" Style="{StaticResource SegFrame}">
+                        <UniformGrid Rows="1" Margin="-1,0,0,0">
+                            <RadioButton x:Name="ModeWindow" GroupName="mode" Style="{StaticResource Seg}" Content="Window" Checked="Mode_Checked"/>
+                            <RadioButton x:Name="ModeScreen" GroupName="mode" Style="{StaticResource Seg}" Content="Display" Checked="Mode_Checked"/>
+                            <RadioButton x:Name="ModeRegion" GroupName="mode" Style="{StaticResource Seg}" Content="Region" Checked="Mode_Checked"/>
+                        </UniformGrid>
+                    </Border>
+                </Grid>
+
+                <Border x:Name="PreviewWell" Grid.Row="2" Background="{StaticResource Surface}"
+                        SizeChanged="PreviewWell_SizeChanged">
+                    <StackPanel x:Name="PreviewInfo" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock x:Name="PreviewMain" FontFamily="{StaticResource Mono}" FontSize="22"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="PreviewSub" Style="{StaticResource T.Caption}" HorizontalAlignment="Center"
+                                   Margin="0,6,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <Grid x:Name="ListArea" Grid.Row="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="24"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Name="ListTitle" Style="{StaticResource T.Mono}" VerticalAlignment="Top"/>
+                    <Button Style="{StaticResource Ghost}" Content="Refresh" HorizontalAlignment="Right"
+                            VerticalAlignment="Top" Margin="0,-2,0,0" Click="Refresh_Click"/>
+                    <ListBox x:Name="SourceList" Grid.Row="1" Style="{StaticResource SourceList}"
+                             SelectionChanged="SourceList_SelectionChanged">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Title}" TextTrimming="CharacterEllipsis" FontSize="12.5"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding Meta}" FontFamily="{StaticResource Mono}"
+                                               FontSize="11" Opacity="0.55" Margin="14,0,0,0" VerticalAlignment="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+
+                <StackPanel x:Name="RegionArea" Grid.Row="4" Visibility="Collapsed">
+                    <Rectangle Height="1" Fill="{StaticResource Line}" Margin="0,24,0,20"/>
+                    <Button Style="{StaticResource Outline}" Content="Select Region" HorizontalAlignment="Left"
+                            Click="PickRegion_Click"/>
+                </StackPanel>
+            </Grid>
+
+            <Rectangle Grid.Column="1" Fill="{StaticResource Line}"/>
+
+            <!-- Right column -->
+            <Grid Grid.Column="2" Margin="24,20,24,24">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="26"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="26"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="52"/>
+                </Grid.RowDefinitions>
+
+                <!-- 02 Camera -->
+                <StackPanel>
+                    <Grid Height="28">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="02" Style="{StaticResource T.Num}"/>
+                            <TextBlock Text="Camera" Style="{StaticResource T.Section}"/>
+                        </StackPanel>
+                        <CheckBox x:Name="CameraSwitch" Style="{StaticResource Switch}" HorizontalAlignment="Right"
+                                  VerticalAlignment="Center" Checked="Camera_Toggled" Unchecked="Camera_Toggled"/>
+                    </Grid>
+                    <StackPanel x:Name="CameraPanel" Margin="0,10,0,0">
+                        <ComboBox x:Name="CameraPicker" Style="{StaticResource Picker}" DisplayMemberPath="FriendlyName"
+                                  Tag="No camera" SelectionChanged="CameraPicker_SelectionChanged"/>
+                        <Grid Margin="0,12,0,0" Height="32">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="102"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Position" Style="{StaticResource T.Caption}" Margin="0,0,10,0"/>
+                            <Border Grid.Column="1" Width="48" Height="32" BorderBrush="{StaticResource Ink}" BorderThickness="1">
+                                <Grid Margin="1">
+                                    <RadioButton x:Name="CornerTopLeft" GroupName="corner" Style="{StaticResource Corner}" Tag="TopLeft"
+                                                 HorizontalAlignment="Left" VerticalAlignment="Top" Checked="Corner_Checked"/>
+                                    <RadioButton x:Name="CornerTopRight" GroupName="corner" Style="{StaticResource Corner}" Tag="TopRight"
+                                                 HorizontalAlignment="Right" VerticalAlignment="Top" Checked="Corner_Checked"/>
+                                    <RadioButton x:Name="CornerBottomLeft" GroupName="corner" Style="{StaticResource Corner}" Tag="BottomLeft"
+                                                 HorizontalAlignment="Left" VerticalAlignment="Bottom" Checked="Corner_Checked"/>
+                                    <RadioButton x:Name="CornerBottomRight" GroupName="corner" Style="{StaticResource Corner}" Tag="BottomRight"
+                                                 HorizontalAlignment="Right" VerticalAlignment="Bottom" Checked="Corner_Checked"/>
+                                </Grid>
+                            </Border>
+                            <TextBlock Grid.Column="3" Text="Size" Style="{StaticResource T.Caption}" Margin="0,0,10,0"/>
+                            <Border Grid.Column="4" Style="{StaticResource SegFrame}">
+                                <UniformGrid Rows="1" Margin="-1,0,0,0">
+                                    <RadioButton x:Name="SizeS" GroupName="camsize" Style="{StaticResource Seg}" Content="S" Tag="S" Checked="CamSize_Checked"/>
+                                    <RadioButton x:Name="SizeM" GroupName="camsize" Style="{StaticResource Seg}" Content="M" Tag="M" Checked="CamSize_Checked"/>
+                                    <RadioButton x:Name="SizeL" GroupName="camsize" Style="{StaticResource Seg}" Content="L" Tag="L" Checked="CamSize_Checked"/>
+                                </UniformGrid>
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- 03 Audio -->
+                <StackPanel Grid.Row="2">
+                    <StackPanel Orientation="Horizontal" Height="28">
+                        <TextBlock Text="03" Style="{StaticResource T.Num}"/>
+                        <TextBlock Text="Audio" Style="{StaticResource T.Section}"/>
+                    </StackPanel>
+                    <ComboBox x:Name="MicPicker" Style="{StaticResource Picker}" DisplayMemberPath="FriendlyName"
+                              Tag="No microphone" Margin="0,10,0,0" SelectionChanged="MicPicker_SelectionChanged"/>
+                    <c:LevelMeter x:Name="MicLevel" Height="6" Margin="0,10,0,0" Segments="36"
+                                  OnBrush="{StaticResource Ink}" OffBrush="{StaticResource Line}"
+                                  HotBrush="{StaticResource Signal}"/>
+                    <Grid Margin="0,12,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="44"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Gain" Style="{StaticResource T.Caption}" Margin="0,0,14,0"/>
+                        <Slider x:Name="GainSlider" Grid.Column="1" Style="{StaticResource Fader}"
+                                Minimum="0.5" Maximum="2" SmallChange="0.05" LargeChange="0.1"
+                                ValueChanged="GainSlider_ValueChanged"/>
+                        <TextBlock x:Name="GainText" Grid.Column="2" Style="{StaticResource T.Mono}"
+                                   HorizontalAlignment="Right" Foreground="{StaticResource Ink}"/>
+                    </Grid>
+                    <Grid Margin="0,12,0,0">
+                        <TextBlock Text="Noise Suppression" Style="{StaticResource T.Caption}"/>
+                        <CheckBox x:Name="DenoiseSwitch" Style="{StaticResource Switch}" HorizontalAlignment="Right"
+                                  Checked="Denoise_Toggled" Unchecked="Denoise_Toggled"/>
+                    </Grid>
+                    <Grid Margin="0,12,0,0">
+                        <TextBlock Text="System Audio" Style="{StaticResource T.Caption}"/>
+                        <CheckBox x:Name="SystemSwitch" Style="{StaticResource Switch}" HorizontalAlignment="Right"
+                                  Checked="System_Toggled" Unchecked="System_Toggled"/>
+                    </Grid>
+                </StackPanel>
+
+                <!-- 04 Output -->
+                <StackPanel Grid.Row="4">
+                    <StackPanel Orientation="Horizontal" Height="28">
+                        <TextBlock Text="04" Style="{StaticResource T.Num}"/>
+                        <TextBlock Text="Output" Style="{StaticResource T.Section}"/>
+                    </StackPanel>
+                    <Grid Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="12"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Border Style="{StaticResource SegFrame}">
+                            <UniformGrid Rows="1" Margin="-1,0,0,0">
+                                <RadioButton x:Name="Fps30" GroupName="fps" Style="{StaticResource Seg}" Content="30 fps" Tag="30" Checked="Fps_Checked"/>
+                                <RadioButton x:Name="Fps60" GroupName="fps" Style="{StaticResource Seg}" Content="60 fps" Tag="60" Checked="Fps_Checked"/>
+                            </UniformGrid>
+                        </Border>
+                        <Border Grid.Column="2" Style="{StaticResource SegFrame}">
+                            <UniformGrid Rows="1" Margin="-1,0,0,0">
+                                <RadioButton x:Name="QualityStd" GroupName="quality" Style="{StaticResource Seg}" Content="Standard" Tag="Standard" Checked="Quality_Checked"/>
+                                <RadioButton x:Name="QualityHigh" GroupName="quality" Style="{StaticResource Seg}" Content="High" Tag="High" Checked="Quality_Checked"/>
+                            </UniformGrid>
+                        </Border>
+                    </Grid>
+                    <Grid Margin="0,14,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="12"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Cursor" Style="{StaticResource T.Caption}"/>
+                        <CheckBox x:Name="CursorSwitch" Style="{StaticResource Switch}" HorizontalAlignment="Right"
+                                  Checked="Cursor_Toggled" Unchecked="Cursor_Toggled"/>
+                        <TextBlock Grid.Column="2" Text="Countdown" Style="{StaticResource T.Caption}"/>
+                        <CheckBox Grid.Column="2" x:Name="CountdownSwitch" Style="{StaticResource Switch}" HorizontalAlignment="Right"
+                                  Checked="Countdown_Toggled" Unchecked="Countdown_Toggled"/>
+                    </Grid>
+                </StackPanel>
+
+                <Button x:Name="RecordBtn" Grid.Row="6" Style="{StaticResource Record}" Click="Record_Click">
+                    <Grid>
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="10" Height="10" Fill="{StaticResource Signal}" VerticalAlignment="Center"/>
+                            <TextBlock Text="Record" FontSize="14" FontWeight="SemiBold" Margin="12,0,0,1"
+                                       Foreground="{StaticResource Paper}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock Text="F9" FontFamily="{StaticResource Mono}" FontSize="11"
+                                   Foreground="{StaticResource MutedOnInk}" HorizontalAlignment="Right"
+                                   VerticalAlignment="Center"/>
+                    </Grid>
+                </Button>
+            </Grid>
+        </Grid>
+
+        <Rectangle Grid.Row="3" Fill="{StaticResource Line}"/>
+
+        <!-- Footer -->
+        <Grid Grid.Row="4" Margin="24,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="Save to" Style="{StaticResource T.Caption}"/>
+                <TextBlock x:Name="OutDirText" Style="{StaticResource T.Mono}" Margin="10,0,12,0" MaxWidth="300"
+                           TextTrimming="CharacterEllipsis"/>
+                <Button Style="{StaticResource Ghost}" Content="Change" Click="ChangeDir_Click"/>
+            </StackPanel>
+            <StackPanel x:Name="LastPanel" Grid.Column="1" Orientation="Horizontal" Visibility="Collapsed">
+                <TextBlock x:Name="LastText" Style="{StaticResource T.Mono}" MaxWidth="250" TextTrimming="CharacterEllipsis"/>
+                <Button Style="{StaticResource Ghost}" Content="Play" Margin="16,0,0,0" Click="Play_Click"/>
+                <Button Style="{StaticResource Ghost}" Content="Show in Folder" Margin="14,0,0,0" Click="Reveal_Click"/>
+            </StackPanel>
+            <TextBlock x:Name="Notice" Grid.Column="1" FontSize="12" Foreground="{StaticResource Signal}"
+                       VerticalAlignment="Center" MaxWidth="380" TextTrimming="CharacterEllipsis" Visibility="Collapsed"/>
+        </Grid>
+    </Grid>
+</Window>

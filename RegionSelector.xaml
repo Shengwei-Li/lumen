@@ -1,0 +1,26 @@
+<Window x:Class="Lumen.RegionSelector"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Lumen" WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        ResizeMode="NoResize" Topmost="True" ShowInTaskbar="False" WindowStartupLocation="Manual"
+        Width="200" Height="200" Cursor="Cross" FontFamily="{StaticResource Sans}"
+        UseLayoutRounding="True" SnapsToDevicePixels="True">
+    <Grid>
+        <Canvas x:Name="Root" Background="#01000000">
+            <Path x:Name="Dim" Fill="#99000000"/>
+            <Rectangle x:Name="Sel" Stroke="{StaticResource Paper}" StrokeThickness="1" Visibility="Collapsed"/>
+            <Border x:Name="SizeTag" Background="{StaticResource Ink}" Padding="8,4" Visibility="Collapsed">
+                <TextBlock x:Name="SizeText" FontFamily="{StaticResource Mono}" FontSize="11"
+                           Foreground="{StaticResource Paper}"/>
+            </Border>
+        </Canvas>
+        <Border x:Name="Hint" Background="{StaticResource Ink}" Padding="18,12"
+                HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False">
+            <StackPanel>
+                <TextBlock Text="Drag to select" FontSize="13" Foreground="{StaticResource Paper}"/>
+                <TextBlock Text="Shift  16:9     Esc  Cancel" FontFamily="{StaticResource Mono}" FontSize="11"
+                           Foreground="{StaticResource MutedOnInk}" Margin="0,6,0,0"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
